@@ -33,4 +33,4 @@ jobs:
       - name: Authorize and run ${{ matrix.binary }}
         run: |
           chmod +x ${{ matrix.binary }}
-          ${{ matrix.binary }} -top 3
+          sudo ${{ matrix.binary }} -top 3
