@@ -1,0 +1,36 @@
+name: Manual Run hcache
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: Run on ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+            binary: hcache/hcache-linux-amd64
+          - arch: arm64
+            runner: ubuntu-22.04-arm
+            binary: hcache/hcache-linux-arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print system info
+        run: |
+          echo "=== OS Info ==="
+          uname -a
+          echo "=== Architecture ==="
+          uname -m
+          echo "=== CPU Info ==="
+          lscpu | grep -E "Architecture|Model name" || true
+
+      - name: Authorize and run ${{ matrix.binary }}
+        run: |
+          chmod +x ${{ matrix.binary }}
+          ${{ matrix.binary }}
